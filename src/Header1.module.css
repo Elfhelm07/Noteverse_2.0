@@ -1,0 +1,243 @@
+/* Header1.module.css */
+
+:global(body),
+:global(html) {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif; 
+}
+
+.sidebar-toggle {
+    display: none; 
+}
+
+.main-container {
+    display: grid;
+    grid-template-columns: auto 1fr; 
+    height: 100vh; 
+}
+
+.sidebar {
+    background-color: #1c1c39;
+    color: #fff;
+    padding: 20px;
+    overflow-y: auto; 
+    transition: transform 0.3s ease; 
+}
+
+.nav-open {
+    transform: translateX(0); 
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+.menu-heading {
+    padding-top: 60px;
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.menu-heading h3 {
+    font-size: 16px; 
+    margin-bottom: 0;
+    line-height: 1;
+     
+}
+.preferences {
+    font-size: 16px;
+    margin-bottom: 0px;
+    margin-left: 15px;
+  }
+.heading-line{
+    margin-left: 15px;
+    border: none;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.5); 
+    margin-top: 0px;
+    margin-bottom: 9px;
+  
+}
+.menu-line {
+    border: none;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.5); 
+    margin-top: 0px;
+    margin-bottom: 9px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    padding-left: 20px;
+}
+
+nav ul li {
+    margin-bottom: 10px;
+    font-size: 13px;
+    padding-bottom: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+footer {
+    padding-top: 50px;
+    margin-top: auto;
+}
+
+footer h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+    padding-left: 20px;
+}
+
+footer ul li {
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.right-container {
+    display: grid;
+    grid-template-rows: auto 1fr; 
+}
+
+.right-header {
+    background-color: #1c1c39;
+    color: #fff;
+    padding: 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.welcome {
+    font-size: 16px;
+}
+
+.search-bar {
+    width: 40%; 
+    margin: 0 20px; 
+    height: 40px;
+    position: relative; 
+}
+
+.search-bar input {
+    width: calc(100% - 40px); 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 16px;
+    box-sizing: border-box; 
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: black; 
+    font-size: 18px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile p {
+    padding-right: 10px;
+}
+
+.user-profile img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background: radial-gradient(circle, #F8E7F0, #FFFFFF);
+    overflow-y: auto; 
+    max-height: calc(100vh - 40px); 
+    border-top-left-radius: 20px;
+}
+
+.book-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Added transition */
+}
+
+.book-info img {
+    width: 140px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.book-title {
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.author-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.book-info:hover {
+    transform: scale(1.1); /* Increase the size on hover */
+    z-index:999;
+    
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        grid-template-columns: auto 1fr; 
+    }
+    
+    .sidebar {
+        transform: translateX(-100%); 
+    }
+    
+    .sidebar-toggle {
+        display: block; 
+        background-color: #1c1c39;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    
+    .right-container {
+        grid-column: 1 / span 2;
+    }
+}

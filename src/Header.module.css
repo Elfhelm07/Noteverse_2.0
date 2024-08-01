@@ -1,0 +1,113 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-image: linear-gradient(90deg, #5170ff, #ff66c4);
+  color: #fff;
+  padding: 20px;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-background {
+  background: linear-gradient(300deg, #00bfff, #ff4c68, #ef8172);
+  background-size: 180% 180%;
+  animation: gradient-animation 18s ease infinite;
+}
+
+.button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 40px;
+}
+
+.header-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.header-content h1 {
+  font-size: 3rem;
+  color: rgb(233, 237, 240);
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+.header-content h3 {
+  color: rgb(233, 237, 240);
+}
+
+.header-content h1 span img {
+  width: 35px;
+  height: auto;
+}
+
+.header-content button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 15px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #3068c9;
+}
+
+.header-content p {
+  font-size: 1rem;
+  color: rgb(233, 237, 240);
+  text-align: ;
+  margin-bottom: 50px;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.header-content .contact-button {
+  background-color: #4087f1;
+  height: 50px;
+  width: 150px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  margin-right: 20px;
+}
+
+.buttons .reusme-button {
+  background-color: #4087f1;
+  color: white;
+  height: 50px;
+  width: 150px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.header-name img {
+  margin: 20px;
+  width: 400px;
+  height: 400px;
+}
+
+.header-name {
+  border: None;
+}

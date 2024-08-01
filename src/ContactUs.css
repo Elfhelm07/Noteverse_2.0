@@ -1,0 +1,36 @@
+#contact-us {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 80px;
+    background-color: black;
+    color: #8C52FF;
+  }
+  
+  .contact-content img {
+    padding-right: 10px;
+  }
+  
+  .contact-content {
+    flex: 1;
+    padding-right: 60px;
+  }
+  
+  .contact-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .contact-content h3 {
+    margin-bottom: 10px;
+  }
+  
+  .contact-content h2 {
+    margin-bottom: 90px;
+  }
+  
+  .contact-content p {
+    color: white;
+    margin-bottom: 20px;
+  }

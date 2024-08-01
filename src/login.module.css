@@ -1,0 +1,168 @@
+/* login.module.css */
+
+* {
+    margin: 0px;
+    
+}
+
+.main_container {
+    
+    background-color: #1C1C39;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    display: flex;
+}
+
+.left_container {
+    /* position: absolute; */
+    flex: 1;
+}
+
+.logoHeading {
+    display: inline-block;
+    position: absolute;
+    font-size: 37px;
+    height: fit-content;
+    margin-left: 5px;
+    margin-top: 50px;
+    color: #FDDBBE;
+}
+
+.logo_slogan {
+    display: inline-block;
+    color: white;
+    position: absolute;
+    height: fit-content;
+    margin-left: 5px;
+    margin-top: 90px;
+    font-size: 16.5px;
+}
+
+.signUp { 
+    color: #FDDBBE;
+    text-align: center;
+    margin: auto;
+    height: fit-content;
+    margin-top: 30px;
+    font-weight: 500;
+    margin-bottom: 37px;
+}
+
+.logo{
+    height: 65px;
+    width: 65px;
+    margin-left: 55px;
+    margin-top: 55px;
+    /* display: inline-block; */
+}
+
+.form_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+}
+
+.signup_form {
+    text-align: center;
+    width: 80%;
+}
+
+.signup_form input {
+    height: 40px;
+    width: 385px;
+    margin-bottom: 20px;
+    text-align: left;
+    padding-left: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+   /* justify-content: center; */
+}
+
+.signup_form button {
+    height: 40px;
+    width: 400px;
+    background-color: #593EA1;
+    color: #FDDBBE;
+    border: 2px solid #593EA1;
+    margin-top: 15px;
+    border-radius:8px;
+    font-size: 20px;
+}
+
+.login_link_container {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-top: 23px;
+    height: fit-content;
+    vertical-align: middle;
+}
+
+.loginLine {
+    font-weight: 200;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.loginLink{
+    color: #FDDBBE;
+    text-decoration: none;
+    margin-left: 3px;
+    display: inline-block;
+}
+
+.or {
+    text-align: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 36px;
+    font-weight: 400;
+    font-size: 16px;
+    height: fit-content;
+}
+
+.image_link_container {
+    /* height: 200px;
+    width: 200px; */
+    margin-top: 25px;
+    text-align: center;
+    justify-content: center;
+    position: relative;
+    height: fit-content;
+}
+
+.image_link_container img {
+    height: 50px;
+    width: 50px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#googleLogo {
+    height: 29px;
+    width: 28px;
+    margin-bottom: 15px;
+}
+
+#facebookLogo {
+    /* border: 5px solid #1C1C39;
+    border-radius: 35px; */
+    margin-left: 15px;
+    margin-right: 14px;
+    height: 60px;
+    width: 60px;
+}
+
+#appleLogo {
+    height: 38px;
+    width: 38px;
+    margin-bottom: 12px;
+}
+
+.right_container {
+    flex: 0;
+    margin-right: 0%;
+}
