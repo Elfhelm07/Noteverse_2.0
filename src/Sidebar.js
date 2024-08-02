@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from './Header1.module.css'; // Import CSS module
-import '@fortawesome/fontawesome-free/css/all.min.css'; // Import Font Awesome CSS
+import styles from './Header1.module.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const menuItemsArray = [
-  { icon: 'fas fa-home', text: 'home', link: '#' },
+  { icon: 'fas fa-home', text: 'Home', link: '#' },
   { icon: 'fas fa-book', text: 'Library', link: '#' },
   { icon: 'fas fa-sticky-note', text: 'Notes', link: '#' },
   { icon: 'fas fa-cloud-upload-alt', text: 'Upload', link: '#' },
@@ -13,9 +13,10 @@ const footerItemArray = [
   { icon: 'fas fa-user', text: 'My Profile', link: '#' },
 ];
 
-function Sidebar({ onPageChange }) { // Accept onPageChange prop
-  const handleClick = (page) => {
-    onPageChange(page); // Call onPageChange with the clicked page
+function Sidebar({ onPageChange }) {
+  const handleClick = (e, page) => {
+    e.preventDefault();
+    onPageChange(page.toLowerCase());
   };
 
   return (
@@ -29,9 +30,11 @@ function Sidebar({ onPageChange }) { // Accept onPageChange prop
         <ul id="menu-list">
           {menuItemsArray.map((item, index) => (
             <li id={`menu-item-${index}`} key={index}>
-              <a id={`menu-link-${index}`} 
-              href={item.link}
-              onClick={() => handleClick(item.text)}> {/* Pass the text of the item as the page */}
+              <a
+                id={`menu-link-${index}`}
+                href={item.link}
+                onClick={(e) => handleClick(e, item.text)}
+              >
                 <i id={`menu-icon-${index}`} className={item.icon}></i> {item.text}
               </a>
             </li>
@@ -44,8 +47,11 @@ function Sidebar({ onPageChange }) { // Accept onPageChange prop
         <ul id="footer-list">
           {footerItemArray.map((item, index) => (
             <li id={`footer-item-${index}`} key={index}>
-              <a id={`footer-link-${index}`} 
-              href={item.link}>
+              <a
+                id={`footer-link-${index}`}
+                href={item.link}
+                onClick={(e) => e.preventDefault()}
+              >
                 <i id={`footer-icon-${index}`} className={item.icon}></i> {item.text}
               </a>
             </li>

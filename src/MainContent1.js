@@ -1,59 +1,95 @@
-// MainContent.js
-
-import React from 'react';
-import styles from './Header1.module.css'; // Import CSS module
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import styles from './MainContent1.module.css';
+import EditBookModal from './EditBookModal';
 
 function MainContent() {
-  // Define array of book data
-  const bookArray = [
-    {
-      title: "Reaper's Gale",
-      author: "Steven Erikson",
-      image: "book-cover.png"
-    },
-    {
-      title: "Cather",
-      author: "Author Name",
-      image: "cather.png"
-    },
-    {
-      title: "Gatsby",
-      author: "Author Name",
-      image: "gastsby.png"
-    },
-    {
-      title: "Image",
-      author: "Author Name",
-      image: "image.png"
-    },
-    {
-      title: "Mocking",
-      author: "Author Name",
-      image: "mocking.png"
-    },
-    {
-      title: "Pride",
-      author: "Author Name",
-      image: "pride.png"
-    },
-    // Add more book objects as needed
-  ];
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editingBook, setEditingBook] = useState(null);
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/api/books');
+      setBooks(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      setError('Error fetching books. Please try again later.');
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (book) => {
+    setEditingBook(book);
+  };
+
+  const handleDelete = async (bookId) => {
+    if (window.confirm('Are you sure you want to delete this book?')) {
+      try {
+        await axios.delete(`http://localhost:3001/api/books/${bookId}`);
+        fetchBooks(); // Refresh the book list
+      } catch (error) {
+        console.error('Error deleting book:', error);
+        alert('Error deleting book. Please try again.');
+      }
+    }
+  };
+
+  const handleCloseEdit = () => {
+    setEditingBook(null);
+    fetchBooks(); // Refresh the book list after editing
+  };
+
+  if (loading) return <div className={styles.loading}>Loading...</div>;
+  if (error) return <div className={styles.error}>{error}</div>;
 
   return (
-    <main className={styles['main-content']} id="bookList">
-      {/* Render books using map function */}
-      {bookArray.map((bookArray, index) => (
-        <div className={styles['book-info']} key={index}>
-          <div className={styles['book-content']}>
-            {/* Adjust image path based on public folder */}
-            <img src={`/images/${bookArray.image}`} alt="Book Cover" />
-            <div className={styles['book-des']}>
-              <p className={styles['book-title']}>{bookArray.title}</p>
-              <p className={styles['author-name']}>{bookArray.author}</p>
+    <main className={styles.mainContent} id="bookList">
+      {books.length === 0 ? (
+        <div className={styles.noBooks}>No books available. Try uploading some!</div>
+      ) : (
+        <div className={styles.bookGrid}>
+          {books.map((book) => (
+            <div className={styles.bookCard} key={book._id}>
+              <div className={styles.bookHeader}>
+                <h3 className={styles.bookTitle}>{book.name}</h3>
+                <div className={styles.bookMenu}>
+                  <button onClick={() => handleEdit(book)}>⋮</button>
+                  <div className={styles.bookMenuOptions}>
+                    <button onClick={() => handleEdit(book)}>Edit</button>
+                    <button onClick={() => handleDelete(book._id)}>Delete</button>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.bookCover}>
+                {book.coverImage ? (
+                  <img src={`http://localhost:3001/${book.coverImage}`} alt={`${book.name} cover`} />
+                ) : (
+                  <div className={styles.noCover}>No Cover</div>
+                )}
+              </div>
+              <div className={styles.bookInfo}>
+                <p className={styles.bookAuthor}>by {book.author}</p>
+                <p className={styles.bookDate}>Published: {new Date(book.publishingDate).toLocaleDateString()}</p>
+                <div className={styles.bookRating}>
+                  Rating: {book.rating}/5
+                  <span className={styles.stars}>
+                    {'★'.repeat(Math.round(book.rating))}
+                    {'☆'.repeat(5 - Math.round(book.rating))}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      ))}
+      )}
+      {editingBook && <EditBookModal book={editingBook} onClose={handleCloseEdit} />}
     </main>
   );
 }

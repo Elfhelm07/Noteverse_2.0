@@ -9,12 +9,9 @@ import Dashboard from './Dashboard';
 import Login from './login';
 import Signup from './Signup';
 import "./style.css"
+import UploadBook from './UploadBook';
 
-const contentPropsArray = {
-  titleProp: "We'll help perfect your business model: Optimizing Strategies for Success",
-};
-
-const validPages = ["home", "login", "signup", "library"];
+const validPages = ["home", "login", "signup", "library", "upload"];
 
 function App() {
   const [page, setPage] = useState("home");
@@ -32,20 +29,15 @@ function App() {
 
   return (
     <div id="app">
-      {page !== "library" && <Navbar onsetPageProp={handleNavbarClick} />}
-      {page === "login" && <Login />}
-      {page === "signup" && <Signup />}
-      {page === "home" && (
+      {page !== "library" && page !== "upload" && page !== "home" && (
         <>
-          <Header />
-          <AboutUs />
-          <Services />
-          <ContentSection {...contentPropsArray} />
-          <ContactUs id="contact-us" />
+          <Navbar onsetPageProp={handleNavbarClick} />
+          {page === "login" && <Login />}
+          {page === "signup" && <Signup />}
         </>
       )}
-      {page === "library" && (
-        <Dashboard onPageChange={setPage} />
+      {(page === "library" || page === "upload" || page === "home") && (
+        <Dashboard onPageChange={setPage} currentPage={page} />
       )}
     </div>
   );
