@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
+const pdf = require('pdf-poppler');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
@@ -31,12 +33,37 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    const allowedTypes = ['.pdf', '.epub', '.mobi'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowedTypes.includes(ext)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only PDF, EPUB, and MOBI are allowed.'));
+    }
+  }
+});
 
 app.post('/api/upload-book', upload.single('file'), async (req, res) => {
   try {
     const { name, author, publishingDate, rating } = req.body;
     const filePath = req.file.path;
+    
+    // Generate cover image from the first page of the PDF
+    let coverImage = '';
+    if (path.extname(filePath).toLowerCase() === '.pdf') {
+      const opts = {
+        format: 'png',
+        out_dir: path.dirname(filePath),
+        out_prefix: path.basename(filePath, '.pdf'),
+        page: 1
+      }
+      
+      await pdf.convert(filePath, opts);
+      coverImage = `uploads/${opts.out_prefix}-1.png`;
+    }
 
     const book = new Book({
       name,
@@ -44,6 +71,7 @@ app.post('/api/upload-book', upload.single('file'), async (req, res) => {
       publishingDate,
       rating,
       filePath,
+      coverImage,
     });
 
     await book.save();
