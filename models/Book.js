@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 
-const bookSchema = new mongoose.Schema({
-  title: String,
-  author_name: [String],
-  cover_i: String,
-  pdf_url: String // URL to the PDF file
+const BookSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  author: { type: String, required: true },
+  publishingDate: { type: Date, required: true },
+  rating: { type: Number, required: true },
+  filePath: { type: String, required: true },
+  coverImage: { type: String },
+  currentPage: { type: Number, default: 1 },
+  bookmarks: { type: Map, of: String, default: {} }
 });
 
-const Book = mongoose.model('Book', bookSchema);
-module.exports = Book;
+module.exports = mongoose.models.Book || mongoose.model('Book', BookSchema);

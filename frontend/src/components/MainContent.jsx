@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../api/axios';
 import EditBookModal from './EditBookModal';
 
 function MainContent() {
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingBook, setEditingBook] = useState(null);
 
@@ -14,13 +13,20 @@ function MainContent() {
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/books');
+      const response = await axios.get('/books');
       setBooks(response.data);
-      setLoading(false);
+      setError(null);
     } catch (error) {
       console.error('Error fetching books:', error);
-      setError('Error fetching books. Please try again later.');
-      setLoading(false);
+      setError('Failed to fetch books. Please try again later.');
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        console.error('Error status:', error.response.status);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
     }
   };
 
@@ -29,24 +35,29 @@ function MainContent() {
   };
 
   const handleDelete = async (bookId) => {
-    if (window.confirm('Are you sure you want to delete this book?')) {
-      try {
-        await axios.delete(`http://localhost:3001/api/books/${bookId}`);
-        fetchBooks(); // Refresh the book list
-      } catch (error) {
-        console.error('Error deleting book:', error);
-        alert('Error deleting book. Please try again.');
-      }
+    try {
+      await axios.delete(`/books/${bookId}`);
+      setBooks(prevBooks => prevBooks.filter(book => book._id !== bookId));
+    } catch (error) {
+      console.error('Error deleting book:', error);
+      setError('Failed to delete book. Please try again later.');
     }
   };
 
   const handleCloseEdit = () => {
     setEditingBook(null);
-    fetchBooks(); // Refresh the book list after editing
   };
 
-  if (loading) return <div className="text-center text-lg mt-5">Loading...</div>;
-  if (error) return <div className="text-center text-lg mt-5 text-red-600">{error}</div>;
+  const handleBookUpdated = (updatedBook) => {
+    setBooks(prevBooks => prevBooks.map(book => 
+      book._id === updatedBook._id ? updatedBook : book
+    ));
+    setEditingBook(null);
+  };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <main className="p-5">
@@ -55,7 +66,7 @@ function MainContent() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {books.map((book) => (
-            <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:-translate-y-1">
+            <div key={book._id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:-translate-y-1">
               <div className="flex justify-between items-center p-4 border-b border-gray-200">
                 <h3 className="text-lg font-bold">{book.name}</h3>
                 <div className="relative group">
@@ -75,20 +86,30 @@ function MainContent() {
               </div>
               <div className="p-4">
                 <p className="text-gray-600 mb-2">by {book.author}</p>
-                <p className="text-gray-500 text-sm mb-2">Published: {new Date(book.publishingDate).toLocaleDateString()}</p>
-                <div className="flex items-center justify-between mt-2">
-                  <span>Rating: {book.rating}/5</span>
-                  <span className="text-yellow-500">
-                    {'★'.repeat(Math.round(book.rating))}
-                    {'☆'.repeat(5 - Math.round(book.rating))}
-                  </span>
-                </div>
+                {book.publishingDate && (
+                  <p className="text-gray-500 text-sm mb-2">Published: {new Date(book.publishingDate).toLocaleDateString()}</p>
+                )}
+                {book.rating && (
+                  <div className="flex items-center justify-between mt-2">
+                    <span>Rating: {book.rating}/5</span>
+                    <span className="text-yellow-500">
+                      {'★'.repeat(Math.round(book.rating))}
+                      {'☆'.repeat(5 - Math.round(book.rating))}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ))}
         </div>
       )}
-      {editingBook && <EditBookModal book={editingBook} onClose={handleCloseEdit} />}
+      {editingBook && (
+        <EditBookModal
+          book={editingBook}
+          onClose={handleCloseEdit}
+          onBookUpdated={handleBookUpdated}
+        />
+      )}
     </main>
   );
 }

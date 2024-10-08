@@ -9,7 +9,8 @@ router.get('/books', async (req, res) => {
     const books = await Book.find();
     res.json(books);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching books:', error);
+    res.status(500).json({ message: 'Error fetching books', error: error.message });
   }
 });
 
@@ -20,7 +21,8 @@ router.get('/books/:id', async (req, res) => {
     if (!book) return res.status(404).json({ message: 'Book not found' });
     res.json(book);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching book:', error);
+    res.status(500).json({ message: 'Error fetching book', error: error.message });
   }
 });
 
