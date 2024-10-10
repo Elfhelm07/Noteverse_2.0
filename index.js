@@ -7,7 +7,7 @@ const pdf = require('pdf-poppler');
 const fs = require('fs').promises; // Add this at the top of your file if not already present
 
 const app = express();
-app.use(cors());
+app.use(cors()); // Added this line to enable CORS
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
@@ -27,6 +27,7 @@ const BookSchema = new mongoose.Schema({
   rating: Number,
   filePath: String,
   coverImage: String,
+  bookmarks: { type: [Number], default: [] }, // Add this line
 });
 
 const Book = mongoose.model('Book', BookSchema);
@@ -71,8 +72,8 @@ app.post('/api/upload-book', upload.single('file'), async (req, res) => {
       }
       
       await pdf.convert(filePath, opts);
-      coverImage = `uploads/${opts.out_prefix}-1.png`;
-    }
+      coverImage = `uploads/${opts.out_prefix}-001.png`;
+    } 
 
     const book = new Book({
       name,
@@ -127,14 +128,30 @@ app.delete('/api/books/:id', async (req, res) => {
 
     // Delete the associated file
     if (filePath) {
-      await fs.unlink(filePath);
-      console.log(`Deleted file: ${filePath}`);
+      try {
+        await fs.unlink(filePath);
+        console.log(`Deleted file: ${filePath}`);
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          console.warn(`File not found, skipping deletion: ${filePath}`);
+        } else {
+          console.error(`Error deleting file: ${error.message}`);
+        }
+      }
     }
 
     // Delete the cover image if it exists
     if (coverImage) {
-      await fs.unlink(coverImage);
-      console.log(`Deleted cover image: ${coverImage}`);
+      try {
+        await fs.unlink(coverImage);
+        console.log(`Deleted cover image: ${coverImage}`);
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          console.warn(`File not found, skipping deletion: ${coverImage}`);
+        } else {
+          console.error(`Error deleting cover image: ${error.message}`);
+        }
+      }
     }
 
     // Remove the book from the database

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import EditBookModal from './EditBookModal';
+import { useNavigate } from 'react-router-dom';
 
 function MainContent() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingBook, setEditingBook] = useState(null);
+  const navigate = useNavigate(); // Add useNavigate hook
 
   useEffect(() => {
     fetchBooks();
@@ -45,6 +47,11 @@ function MainContent() {
     fetchBooks(); // Refresh the book list after editing
   };
 
+  // const handleCardClick = (bookId, event) => {
+  //   event.stopPropagation(); // Prevent the event from bubbling up
+  //   navigate(`/viewer/${bookId}`);
+  // };
+
   if (loading) return <div className="text-center text-lg mt-5">Loading...</div>;
   if (error) return <div className="text-center text-lg mt-5 text-red-600">{error}</div>;
 
@@ -55,7 +62,7 @@ function MainContent() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {books.map((book) => (
-            <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:-translate-y-1">
+            <div key={book._id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:-translate-y-1 cursor-pointer" onClick={() => handleCardClick(book._id, event)}>
               <div className="flex justify-between items-center p-4 border-b border-gray-200">
                 <h3 className="text-lg font-bold">{book.name}</h3>
                 <div className="relative group">

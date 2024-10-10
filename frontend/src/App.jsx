@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import AboutUs from './components/AboutUs';
@@ -8,49 +9,53 @@ import ContactUs from './components/ContactUs';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import UploadBook from './components/UploadBook'; // Ensure correct path
+import UploadBook from './components/UploadBook'; 
+import PDFViewer from './components/PDFViewer';
 
 const contentPropsArray = {
   titleProp: "We'll help perfect your business model: Optimizing Strategies for Success",
 };
 
-const validPages = ["home", "login", "signup", "library", "upload"];
+const validPages = ["home", "login", "signup", "library"];
 
 function App() {
-  const [page, setPage] = useState("home");
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
+}
 
-  useEffect(() => {
-    if (!validPages.includes(page.toLowerCase())) {
-      setPage("home");
-      alert("Invalid page set. Redirected to Home.");
+function AppContent() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isViewerPage = location.pathname.startsWith('/viewer');
+
+  const handleNavbarClick = (page) => {
+    if (validPages.includes(page)) {
+      navigate(`/${page === 'home' ? '' : page}`);
     }
-  }, [page]);
-
-  const handleNavbarClick = (newPage) => {
-    setPage(newPage.toLowerCase());
   };
 
   return (
     <div id="app">
-      {(page !== "library" && page !== "upload") && (
-        <>
-          <Navbar onsetPageProp={handleNavbarClick} />
-          {page === "home" && (
-            <>
-              <Header />
-              <AboutUs />
-              <Services />
-              <ContentSection {...contentPropsArray} />
-              <ContactUs id="contact-us" />
-            </>
-          )}
-          {page === "login" && <Login />}
-          {page === "signup" && <Signup />}
-        </>
-      )}
-      {(page === "library" || page === "upload") && (
-        <Dashboard onPageChange={setPage} currentPage={page} />
-      )}
+      {!isViewerPage && <Navbar onsetPageProp={handleNavbarClick} />}
+      <Routes>
+        <Route path="/" element={
+          <>
+            <Header />
+            <AboutUs />
+            <Services />
+            <ContentSection {...contentPropsArray} />
+            <ContactUs id="contact-us" />
+          </>
+        } />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/library" element={<Dashboard currentPage="library" />} />
+        <Route path="/upload" element={<Dashboard currentPage="upload" />} />
+        <Route path="/viewer/:id" element={<PDFViewer />} />
+      </Routes>
     </div>
   );
 }

@@ -7,5 +7,7 @@ const bookSchema = new mongoose.Schema({
   pdf_url: String // URL to the PDF file
 });
 
-const Book = mongoose.model('Book', bookSchema);
+// Check if the model already exists
+const Book = mongoose.models.Book || mongoose.model('Book', bookSchema);
+
 module.exports = Book;

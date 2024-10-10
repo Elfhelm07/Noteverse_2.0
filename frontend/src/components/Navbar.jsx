@@ -4,7 +4,7 @@ const navItemsArray = [
   { href: "", text: "Home" },
   { href: "#about-us", text: "About Us" },
   { href: "#contact-us", text: "Services" },
-  { href: "#library", text: "Library", page: "Library" },
+  { href: "library", text: "Library", page: "Library" },
 ];
 
 const Navbar = ({ onsetPageProp }) => {
