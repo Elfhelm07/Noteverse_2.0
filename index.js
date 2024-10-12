@@ -26,7 +26,7 @@ const BookSchema = new mongoose.Schema({
   publishingDate: Date,
   rating: Number,
   filePath: String,
-  coverImage: String,
+  coverImage: { type: String, default: '' }, // Ensure coverImage is defined correctly
   bookmarks: { type: [Number], default: [] }, // Add this line
 });
 
@@ -58,7 +58,7 @@ app.post('/api/upload-book', upload.single('file'), async (req, res) => {
   try {
     console.log('Received upload request');
     const { name, author, publishingDate, rating } = req.body;
-    const filePath = req.file.path;
+    const filePath = req.file.path.replace(/\\/g, '/'); // Ensure filePath uses forward slashes
     
     console.log('File uploaded:', filePath);
     
@@ -72,7 +72,7 @@ app.post('/api/upload-book', upload.single('file'), async (req, res) => {
       }
       
       await pdf.convert(filePath, opts);
-      coverImage = `uploads/${opts.out_prefix}-001.png`;
+      coverImage = `uploads/${opts.out_prefix}-01.png`.replace(/\\/g, '/'); // Ensure coverImage uses forward slashes
     } 
 
     const book = new Book({

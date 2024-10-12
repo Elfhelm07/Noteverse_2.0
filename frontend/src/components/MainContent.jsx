@@ -90,6 +90,7 @@ function MainContent() {
                     {'☆'.repeat(5 - Math.round(book.rating))}
                   </span>
                 </div>
+                <button className="mt-2 bg-blue-500 text-white py-2 px-4 rounded w-full">Read Now</button> {/* Added Read Now button */}
               </div>
             </div>
           ))}
