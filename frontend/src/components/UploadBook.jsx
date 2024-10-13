@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
 function UploadBook() {
   const [bookData, setBookData] = useState({
     name: '',
@@ -10,24 +9,20 @@ function UploadBook() {
     file: null,
   });
   const [message, setMessage] = useState('');
-
   const handleInputChange = (e) => {
     setBookData({ ...bookData, [e.target.name]: e.target.value });
   };
-
   const handleFileChange = (e) => {
     setBookData({ ...bookData, file: e.target.files[0] });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     for (const key in bookData) {
       formData.append(key, bookData[key]);
     }
-
     try {
-      const response = await axios.post('http://localhost:3001/api/upload-book', formData, {
+      const response = await axios.post('https://02qrjo-5173.ocws.app/api/upload-book', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setMessage('Book uploaded successfully!');
@@ -45,7 +40,6 @@ function UploadBook() {
       console.error('Error uploading book:', error);
     }
   };
-
   return (
     <div className="p-5 max-w-md mx-auto bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Upload a Book</h2>
@@ -106,5 +100,4 @@ function UploadBook() {
     </div>
   );
 }
-
 export default UploadBook;
