@@ -27,7 +27,7 @@ const BookSchema = new mongoose.Schema({
   rating: Number,
   filePath: String,
   coverImage: { type: String, default: '' }, // Ensure coverImage is defined correctly
-  bookmarks: { type: [Number], default: [] }, // Add this line
+  bookmarks: [{ text: String, page: Number }],
 });
 
 const Book = mongoose.model('Book', BookSchema);
@@ -175,6 +175,37 @@ app.get('/api/books/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching book:', error);
     res.status(500).json({ error: 'Error fetching book' });
+  }
+});
+
+// Add a bookmark
+app.post('/api/books/:id/bookmarks', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    const { text, page } = req.body;
+    book.bookmarks.push({ text, page });
+    await book.save();
+    res.status(201).json(book.bookmarks);
+  } catch (error) {
+    console.error('Error adding bookmark:', error);
+    res.status(500).json({ error: 'Error adding bookmark' });
+  }
+});
+
+// Get bookmarks for a book
+app.get('/api/books/:id/bookmarks', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    res.json(book.bookmarks);
+  } catch (error) {
+    console.error('Error fetching bookmarks:', error);
+    res.status(500).json({ error: 'Error fetching bookmarks' });
   }
 });
 

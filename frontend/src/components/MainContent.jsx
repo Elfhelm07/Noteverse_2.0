@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import EditBookModal from './EditBookModal';
-import { useNavigate } from 'react-router-dom';
+import PDFViewer from './PDFViewer';
 
 function MainContent() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingBook, setEditingBook] = useState(null);
-  const navigate = useNavigate(); // Add useNavigate hook
+  const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
     fetchBooks();
@@ -47,18 +47,17 @@ function MainContent() {
     fetchBooks(); // Refresh the book list after editing
   };
 
-  // const handleCardClick = (bookId, event) => {
-  //   event.stopPropagation(); // Prevent the event from bubbling up
-  //   navigate(`/viewer/${bookId}`);
-  // };
+  const handleReadNow = (bookId) => {
+    setSelectedBook(bookId);
+  };
 
   if (loading) return <div className="text-center text-lg mt-5">Loading...</div>;
   if (error) return <div className="text-center text-lg mt-5 text-red-600">{error}</div>;
 
   return (
     <main className="p-5">
-      {books.length === 0 ? (
-        <div className="text-center text-lg mt-5">No books available. Try uploading some!</div>
+      {selectedBook ? (
+        <PDFViewer bookId={selectedBook} onClose={() => setSelectedBook(null)} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {books.map((book) => (
@@ -90,7 +89,12 @@ function MainContent() {
                     {'☆'.repeat(5 - Math.round(book.rating))}
                   </span>
                 </div>
-                <button className="mt-2 bg-blue-500 text-white py-2 px-4 rounded w-full">Read Now</button> {/* Added Read Now button */}
+                <button 
+                  className="mt-2 bg-blue-500 text-white py-2 px-4 rounded w-full"
+                  onClick={() => handleReadNow(book._id)}
+                >
+                  Read Now
+                </button>
               </div>
             </div>
           ))}
